@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<!-- SUDOKU LAB HTML FILE -->
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="sudoku.css">
+		<script type="text/javascript" src="sudoku.js"></script>
+		<title>Sudoku</title>
+	</head>
+	<body onload="setup()">
+		<h1>SUDOKU</h1>
+		<div id="gameControl">
+			<button type="button" onclick="startGame()">Start game</button>
+			<button type="button" onclick="pauseTimer()">Pause game</button>
+			<button type="button" onclick="resumeTimer()">Resume game</button>
+		</div>
+		<br>
+		<div id="boardControl">
+			<button type="button" onclick="resetBoard()">Reset board</button>
+			<!-- <button type="button" onclick="restartGame()">Restart game</button> -->
+			<button type="button" onclick="resetColorsToClassic()">Reset colors</button>
+		</div>
+		<div id="timerDisplayDiv">
+			<p id="timerDisplay">0:00</p>
+		</div>
+		<div id="puzzleControl">
+			<button type="button" onclick="newPuzzle()">New puzzle</button>
+			<button type="button" onclick="checkPuzzle()">Check puzzle</button>
+			<button type="button" onclick="getHint()">Get hint</button>
+			<button type="button" onclick="solvePuzzle()">Solve puzzle</button>
+		</div>
+
+		<br>
+
+		<div id="modes">
+			<button type="button" id="classicModeButton" onclick="setModeToClassic()">Classic Mode</button>
+			<button type="button" id="liveCheckModeButton" onclick="setModeToLiveCheck()">Live Check Mode</button>
+		</div>
+
+		<br>
+
+		<!-- Mostly should leave the rest of this HTML alone -->
+		<div id="sudokuBoard">
+		<table cellspacing="0" cellpadding="0">
+		<tr>
+		<td class="boardCellGroupA">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="00" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="01" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="02" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="10" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="11" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="12" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="20" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="21" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="22" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		<td class="boardCellGroupB">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="03" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="04" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="05" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="13" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="14" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="15" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="23" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="24" class="editValue">
+		<input/>
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="25" class="editValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		<td class="boardCellGroupA">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="06" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="07" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="08" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="16" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="17" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="18" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="26" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="27" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="28" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCellGroupB">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="30" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="31" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="32" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="40" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="41" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="42" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="50" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="51" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="52" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		<td class="boardCellGroupA">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="33" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="34" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="35" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="43" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="44" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="45" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="53" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="54" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="55" class="editValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		<td class="boardCellGroupB">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="36" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="37" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="38" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="46" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="47" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="48" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="56" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="57" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="58" class="editValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCellGroupA">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="60" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="61" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="62" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="70" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="71" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="72" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="80" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="81" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="82" class="editValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		<td class="boardCellGroupB">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="63" class="editValue error">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="64" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="65" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="73" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="74" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="75" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="83" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="84" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="85" class="editValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		<td class="boardCellGroupA">
+		<table cellspacing="1" cellpadding="0">
+		<tr>
+		<td class="boardCell">
+		<div id="66" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="67" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="68" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="76" class="staticValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="77" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="78" class="editValue">
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td class="boardCell">
+		<div id="86" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="87" class="editValue">
+		</div>
+		</td>
+		<td class="boardCell">
+		<div id="88" class="staticValue">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</td>
+		</tr>
+		</table>
+		</div>
+
+		<div id="afterBoard" class="info">
+			<br>
+			<p>
+				Welcome to Sudoku! The objective of the game is to fill the <br>board such that each
+				row, column, and box (as arranged by <br>color) with exactly one of the digits
+				1-9.
+				<br>
+				<br>
+				<i>Disclaimer: the page may take some time to load when the <br>"Start game" or
+					"New puzzle" buttons are clicked, since these <br>buttons cause new, unique random
+					Sudoku puzzles to be <br>generated.</i>
+				<br>
+				<br>
+				Here's a basic guide to the controls on this page:
+				<ul>
+					<li>To start a game, press the "Start game" button.</li>
+					<li>To obtain a new puzzle, click the "New puzzle" button.</li>
+					<li>Each game is timed; to pause a game's timer, press the <br>"Pause game" button.
+						To resume a game, press the <br>"Resume game" button.</li>
+					<li>To reset a board, click the "Reset board" button; this will <br>reset
+						the board to the relevant blank puzzle and not <br>restart the timer.</li>
+					<li>To reset the background colors of the board – which may <br>be altered after checking the
+						puzzle – click the "Reset <br>colors" button.</li>
+					<li>To check a puzzle for correctness, click the "Check <br>puzzle" button. The cells that
+						were incorrect when the <br>puzzle was checked will remain red until the next time the <br>button
+						is pressed, unless Live Check mode is in progress <br>or the "Reset colors" button is clicked.</li>
+					<li>To solve a puzzle, click the "Solve puzzle" button. Doing <br>so will terminate the game.</li>
+					<li>This game has two modes: Classic and Live Check. A <br>Classic mode game is a regular
+						Sudoku game. A Live <br>Check game includes the feature of checking whether <br>input
+						values are correct. The mode with the yellow <br>highlighted button is the mode currently
+						being played in. <br>Users may switch modes during games by clicking the <br>button corresponding
+						to the desired mode.</li>
+					<li>To get hints, enter "h"s into the desired spots and click <br>the "Get hint" button. The
+						first time the button is pressed <br>during a run of the program, an alert button will provide
+						<br>these same instructions for emphasis.
+					</li>
+				</ul>
+			</p>
+		</div>
+
+	</body>
+</html>
